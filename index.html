@@ -64,6 +64,7 @@
             const firstNumber = document.getElementById('first_number');
             const secondNumber = document.getElementById('second_number');
             const form = document.querySelector('form');
+            const number = document.getElementById('number');
 
             let numbers = [];
 
@@ -74,6 +75,9 @@
                 e.preventDefault();
 
                 if (window.androidInterface?.showDialog) {
+                    const answer = parseInt(number.value, 10);
+
+                    window.androidInterface.setProblemConfig(numbers[0], numbers[1], answer);
                     window.androidInterface.showDialog();
                 } else {
                     alert('Android interface not found!')
