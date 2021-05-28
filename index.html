@@ -52,6 +52,7 @@
                 <input type="number" id="number" name="number">
             </label>
 
+            <button type="submit">Submit</button>
         </form>
     </main>
 
@@ -62,10 +63,22 @@
             const userName = document.getElementById('username');
             const firstNumber = document.getElementById('first_number');
             const secondNumber = document.getElementById('second_number');
+            const form = document.querySelector('form');
 
             let numbers = [];
 
             prepareNumbers();
+
+
+            form.addEventListener('submit', e => {
+                e.preventDefault();
+
+                if (window.androidInterface?.showDialog) {
+                    window.androidInterface.showDialog();
+                } else {
+                    alert('Android interface not found!')
+                }
+            })
 
             function prepareNumbers () {
                 numbers = [getInt(), getInt()];
