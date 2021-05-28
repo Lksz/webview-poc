@@ -122,14 +122,10 @@
                     e.preventDefault();
 
                     if (isAndroid) {
-                        const answer = parseInt(number.value, 10);
-
-                        $username.textContent = JSON.stringify(Object.keys(window.androidInterface));
+                        const answer = parseInt($answer.value, 10);
 
                         window.androidInterface.setProblemConfig(numbers[0], numbers[1], answer);
                         window.androidInterface.checkAnswer();
-
-
                     } else {
                         alert('Sorry, Can\'t verify your answer. Android interface not found! ')
                     }
