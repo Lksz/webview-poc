@@ -27,6 +27,16 @@
             padding: 32px;
         }
 
+        .info {
+            margin: 2rem 0 2rem;
+        }
+
+        #is-android,
+        #a,
+        #b {
+            font-weight: bold;
+        }
+
         form {
             display: block;
             max-width: 600px;
@@ -38,6 +48,23 @@
             width: 100%;
         }
 
+        input {
+            max-width: 50px;
+            padding: 1rem;
+            margin: 5px 0 30px;
+            font-weight: bold;
+        }
+
+        button {
+            background-color: gold;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 3px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 <body>
@@ -45,56 +72,82 @@
         <h1>
             Hello, <span id="username"></span>!
         </h1>
+        <div class="info">
+            Running inside Android App: <span id="is-android"></span>
+        </div>
 
         <form>
             <label for="number">
-                What is the sum of <span id="first_number"></span> and <span id="second_number"></span>?
-                <input type="number" id="number" name="number">
+                What is the sum of <span id="a"></span> and <span id="b"></span>?
+                <input type="number" id="answer" name="answer">
             </label>
 
-            <button type="submit">Submit</button>
+            <button type="submit">Check answer</button>
         </form>
     </main>
 
 
     <script>
         (() => {
-            const header = document.getElementById('header');
-            const userName = document.getElementById('username');
-            const firstNumber = document.getElementById('first_number');
-            const secondNumber = document.getElementById('second_number');
-            const form = document.querySelector('form');
-            const number = document.getElementById('number');
+            let isAndroid = false;
+
+            const $username = document.getElementById('username');
+            const $a = document.getElementById('a');
+            const $b = document.getElementById('b');
+            const $form = document.querySelector('form');
+            const $answer = document.getElementById('answer');
+            const $isAndroid = document.getElementById('is-android');
 
             let numbers = [];
 
-            prepareNumbers();
+            initialize();
 
-
-            form.addEventListener('submit', e => {
-                e.preventDefault();
-
-                if (window.androidInterface?.showDialog) {
-                    const answer = parseInt(number.value, 10);
-
-                    window.androidInterface.setProblemConfig(numbers[0], numbers[1], answer);
-                    window.androidInterface.showDialog();
-                } else {
-                    alert('Android interface not found!')
-                }
-            })
-
-            function prepareNumbers () {
-                numbers = [getInt(), getInt()];
-                firstNumber.textContent = numbers[0];
-                secondNumber.textContent = numbers[1];
+            function initialize () {
+                _detectAndroid();
+                _prepareNumbers();
+                _setUsername();
+                _handleForm();
             }
 
-            function getInt () {
+            function _detectAndroid () {
+                isAndroid = !!window.androidInterface;
+
+                $isAndroid.textContent = isAndroid;
+                $isAndroid.style.color = isAndroid ? 'forestgreen' : 'orangered';
+            }
+
+
+            function _handleForm () {
+                $form.addEventListener('submit', e => {
+                    e.preventDefault();
+
+                    if (isAndroid) {
+                        const answer = parseInt(number.value, 10);
+
+                        window.androidInterface.setProblemConfig(numbers[0], numbers[1], answer);
+                        window.androidInterface.checkAnswer();
+                    } else {
+                        alert('Sorry, Can\'t verify your answer. Android interface not found! ')
+                    }
+                    $answer.value = "";
+                })
+            }
+
+            function _setUsername () {
+                const username = isAndroid ? window.androidInterface.getUsername() : "Unknown User";
+
+                $username.textContent = username;
+            }
+
+            function _prepareNumbers () {
+                numbers = [_getInt(), _getInt()];
+                $a.textContent = numbers[0];
+                $b.textContent = numbers[1];
+            }
+
+            function _getInt () {
                 return Math.floor(Math.random() * 100);
             }
-
-            console.log('androidInterface', window.androidInterface);
         })();
     </script>
 </body>
