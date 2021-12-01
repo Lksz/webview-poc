@@ -52,6 +52,13 @@
                 <input type="number" id="number" name="number">
             </label>
 
+            <label for="file">
+                Select file
+                <input type="file" id="file" name="file" multiple>
+            </label>
+            <div id="selected-files">
+
+            </div>
         </form>
     </main>
 
@@ -62,10 +69,12 @@
             const userName = document.getElementById('username');
             const firstNumber = document.getElementById('first_number');
             const secondNumber = document.getElementById('second_number');
+            const fileInput = document.getElementById('file');
 
             let numbers = [];
 
             prepareNumbers();
+            listSelectedFiles();
 
             function prepareNumbers () {
                 numbers = [getInt(), getInt()];
@@ -75,6 +84,18 @@
 
             function getInt () {
                 return Math.floor(Math.random() * 100);
+            }
+
+            function listSelectedFiles () {
+                fileInput.addEventListener('change', event => {
+                    const files = Array.from(event.target.files).map(file => {
+                        const { name, size } = file;
+
+                        return `${name}, size: ${size}B`;
+                    }).join('<br>');
+
+                    document.getElementById('selected-files').innerHTML = files;
+                });
             }
         })();
     </script>
