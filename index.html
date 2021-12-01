@@ -48,7 +48,7 @@
             width: 100%;
         }
 
-        input {
+        input[type="number"] {
             max-width: 50px;
             padding: 1rem;
             margin: 5px 0 30px;
@@ -63,6 +63,10 @@
             font-weight: bold;
             color: #333;
             cursor: pointer;
+        }
+
+        .spacer-top {
+            margin-top: 20px;
         }
 
     </style>
@@ -84,6 +88,12 @@
             </label>
 
             <button type="submit">Check answer</button>
+
+            <label for="file" class="spacer-top">
+                Select file
+                <input type="file" id="file" name="file" multiple>
+            </label>
+            <div id="selected-files" class="spacer-top"></div>
         </form>
     </main>
 
@@ -108,6 +118,7 @@
                 _prepareNumbers();
                 _setUsername();
                 _handleForm();
+                listSelectedFiles();
             }
 
             function _detectAndroid () {
@@ -150,6 +161,20 @@
 
             function _getInt () {
                 return Math.floor(Math.random() * 100);
+            }
+
+            function listSelectedFiles () {
+                document
+                    .getElementById('file')
+                    .addEventListener('change', event => {
+                        const files = Array.from(event.target.files).map(file => {
+                            const { name, size } = file;
+
+                            return `${name}, size: ${size}B`;
+                        }).join('<br>');
+
+                        document.getElementById('selected-files').innerHTML = files;
+                    });
             }
         })();
     </script>
