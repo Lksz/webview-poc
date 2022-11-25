@@ -1,0 +1,3 @@
+[submodule "apps/shell"]
+	path = apps/shell
+	url = git@github.com:Lksz/pp-poc-app-shell.git
